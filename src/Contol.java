@@ -1,5 +1,6 @@
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
+import java.util.Random;
 
 public class Contol implements KeyListener{
    
@@ -10,13 +11,16 @@ public class Contol implements KeyListener{
    int pfinaly;
    //constructor
    public Contol(){
-      actual = crearPieza();
-      this.moverPiezaaInicio();
+      actual = new Pieza();
+      crearPieza();
+      
    } 
 
-   public Pieza crearPieza(){
-      Pieza p = new Pieza(3);
-      return p;
+   public void crearPieza(){
+      Random r = new Random();
+      int npieza = r.nextInt(actual.lnombrepieza.length);
+      actual = new Pieza(npieza);
+      this.moverPiezaaInicio();
    }
 
    public void moverPiezaaInicio(){

@@ -9,6 +9,9 @@ public class Pieza {
 
    ArrayList<Coordenadas> body = new ArrayList<Coordenadas>();
 
+   public Pieza(){
+   }
+
    public Pieza(int n){
       switch(n){
          case 0 : {this.crearPiezaI();} break;

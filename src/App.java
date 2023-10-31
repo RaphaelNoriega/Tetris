@@ -17,6 +17,15 @@ public class App extends JFrame implements Runnable{
     BufferedImage bi = new BufferedImage(this.WIDTH,this.HEIGHT,BufferedImage.TYPE_4BYTE_ABGR);
     Graphics gbi = bi.getGraphics();
 
+    public void pintarPiezasTablero(Graphics g){
+        for(Pieza p : control.getLpiezas()){
+            for(Coordenadas c : p.getBody()){
+                g.setColor(p.getColorpieza());
+                g.fillRect((desplazamiento)+(c.getX()*tcelda), (desplazamiento)+(c.getY()*tcelda), tcelda, tcelda);
+            }
+        } 
+    }
+
     public void pintarPieza(Graphics g){
         Pieza p = this.control.getActual();
         for(Coordenadas c : p.getBody()){
@@ -44,6 +53,7 @@ public class App extends JFrame implements Runnable{
         this.pintarFondo(gbi);
         this.pintarTablero(gbi);
         this.pintarPieza(gbi);
+        this.pintarPiezasTablero(gbi);
         g.drawImage(bi,10,10, this.WIDTH,this.HEIGHT,this);
     }
 

@@ -1,6 +1,9 @@
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Random;
+
+import javax.swing.plaf.ActionMapUIResource;
 
 public class Contol implements KeyListener{
    
@@ -9,11 +12,13 @@ public class Contol implements KeyListener{
    int piniy=0;
    int pfinalx;
    int pfinaly;
+
+   ArrayList<Pieza> lpiezas = new ArrayList<Pieza>();
    //constructor
    public Contol(){
       actual = new Pieza();
       crearPieza();
-      
+      //this.moverPiezaaInicio();
    } 
 
    public void crearPieza(){
@@ -52,6 +57,21 @@ public class Contol implements KeyListener{
       return condicion;
    }
 
+   public boolean hayColisioncontraPieza(){
+      boolean condicion = false;
+         //int CoordYPieza = Coordenadas.getY
+         for(Pieza p : this.getLpiezas()){
+            for(Coordenadas ct : p.getBody()){
+               for(Coordenadas cp : actual.getBody()){
+                  if ((cp.getY()+1 == ct.getY()) && (cp.getX() == ct.getX())) {
+                     condicion = true;
+                  }
+               }
+            }
+         }
+      return condicion;
+   }
+
    public void keyTyped(KeyEvent e){
    }
 
@@ -86,9 +106,20 @@ public class Contol implements KeyListener{
       this.pfinaly = pfinaly;
    }
 
+   public ArrayList<Pieza> getLpiezas() {
+      return lpiezas;
+   }
+
+   public void setLpiezas(ArrayList<Pieza> lpiezas) {
+      this.lpiezas = lpiezas;
+   }
+
    public void ejecutarFrame() {
-      if(!this.hayFinalTablero()){
+      if(!this.hayFinalTablero() && hayColisioncontraPieza()){
          this.bajarPieza();
+      }else{
+         this.getLpiezas().add(actual);
+         this.crearPieza();
       }
       
    }

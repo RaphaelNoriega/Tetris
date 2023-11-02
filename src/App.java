@@ -64,6 +64,8 @@ public class App extends JFrame implements Runnable{
         control = new Contol(); ////faltava esta onda
         control.setPfinalx(ncolumnas);
         control.setPfinaly(nfilas);
+        control.limitetabd=ncolumnas;
+        control.limitetabi=0;
         this.addKeyListener(control);
         this.setSize(this.WIDTH,this.HEIGHT);
 

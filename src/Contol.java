@@ -17,7 +17,7 @@ public class Contol implements KeyListener{
    int limitetabd;
    int limitetabi;
 
-   ArrayList<Pieza> lpiezas = new ArrayList<Pieza>();
+   ArrayList<Coordenadas> lpiezas = new ArrayList<Coordenadas>();
    //constructor
    public Contol(){
       actual = new Pieza();
@@ -52,6 +52,10 @@ public class Contol implements KeyListener{
       }
    }
 
+   public void rotarPieza(){
+      actual.rotarPieza();
+   }
+
    public void moverDerecha(){
       for(Coordenadas c : actual.getBody()){
             int x = c.getX();
@@ -82,16 +86,14 @@ public class Contol implements KeyListener{
 
    public boolean hayColisioncontraPieza(){
       boolean condicion = false;
-         //int CoordYPieza = Coordenadas.getY
-         for(Pieza p : this.getLpiezas()){
-            for(Coordenadas ct : p.getBody()){
+            for(Coordenadas ct : this.lpiezas){
                for(Coordenadas cp : actual.getBody()){
                   if ((cp.getY()+1 == ct.getY()) && (cp.getX() == ct.getX())) {
                      condicion = true;
                   }
                }
             }
-         }
+         
       return condicion;
    }
 
@@ -121,9 +123,7 @@ public class Contol implements KeyListener{
       switch(tecla){
          case 'a' : {accion = Accion.LEFT;} break;
          case 'd' : {accion = Accion.RIGHT;} break;
-         case 'A' : {accion = Accion.LEFT;} break;
-         case 'D' : {accion = Accion.RIGHT;} break;
-         case ' ' : {accion = Accion.NOTHING;} break;
+         case ' ' : {accion = Accion.SPACE;} break;
       }
    }
 
@@ -155,11 +155,13 @@ public class Contol implements KeyListener{
       this.pfinaly = pfinaly;
    }
 
-   public ArrayList<Pieza> getLpiezas() {
+   
+  
+   public ArrayList<Coordenadas> getLpiezas() {
       return lpiezas;
    }
 
-   public void setLpiezas(ArrayList<Pieza> lpiezas) {
+   public void setLpiezas(ArrayList<Coordenadas> lpiezas) {
       this.lpiezas = lpiezas;
    }
 
@@ -196,12 +198,18 @@ public class Contol implements KeyListener{
          if(accion == Accion.LEFT){
             this.moverIzquierda();
          }
+         if(accion == Accion.SPACE){
+            this.rotarPieza();
+         }
+         accion=Accion.NOTHING;
+      }else{
+         accion=Accion.NOTHING;
       }
 
       if((!this.hayFinalTablero()) && (!this.hayColisioncontraPieza())){
          this.bajarPieza();
       }else{
-         this.getLpiezas().add(actual);
+         this.getLpiezas().addAll(actual.getBody());
          this.crearPieza();
       }
       

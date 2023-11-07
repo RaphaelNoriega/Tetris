@@ -18,12 +18,11 @@ public class App extends JFrame implements Runnable{
     Graphics gbi = bi.getGraphics();
 
     public void pintarPiezasTablero(Graphics g){
-        for(Pieza p : control.getLpiezas()){
-            for(Coordenadas c : p.getBody()){
-                g.setColor(p.getColorpieza());
+            for(Coordenadas c : control.getLpiezas()){
+                g.setColor(c.getC());
                 g.fillRect((desplazamiento)+(c.getX()*tcelda), (desplazamiento)+(c.getY()*tcelda), tcelda, tcelda);
             }
-        } 
+        
     }
 
     public void pintarPieza(Graphics g){

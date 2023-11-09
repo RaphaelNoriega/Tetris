@@ -1,6 +1,8 @@
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.Random;
 
 import javax.swing.plaf.ActionMapUIResource;
@@ -17,6 +19,7 @@ public class Contol implements KeyListener{
    int limitetabd;
    int limitetabi;
 
+   Comparator comparator = new ComparadorPersonal();
    ArrayList<Coordenadas> lpiezas = new ArrayList<Coordenadas>();
    //constructor
    public Contol(){
@@ -96,6 +99,19 @@ public class Contol implements KeyListener{
          
       return condicion;
    }
+
+   public void ordenarCoordenadas(){
+      this.lpiezas.sort(comparator);
+   }
+    public void imprimir(){
+      Iterator<Coordenadas> itera = this.lpiezas.iterator();
+      System.out.println("----------");
+      while (itera.hasNext()) {
+         Coordenadas c=itera.next();
+         System.out.println(c.toString());
+      }
+      System.out.println("----------");
+    }
 
    public boolean hayMover(){
       boolean condicion = true;
@@ -211,6 +227,8 @@ public class Contol implements KeyListener{
       }else{
          this.getLpiezas().addAll(actual.getBody());
          this.crearPieza();
+         this.ordenarCoordenadas();
+         this.imprimir();
       }
       
    }

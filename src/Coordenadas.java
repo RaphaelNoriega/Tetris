@@ -1,6 +1,6 @@
 import java.awt.Color;
 
-public class Coordenadas {
+public class Coordenadas implements Comparable<Coordenadas>{
    int x;
    int y;
    Color c;
@@ -27,7 +27,7 @@ public class Coordenadas {
    public void setY(int y) {
       this.y = y;
    }
-   
+
    public Color getC() {
       return c;
    }
@@ -35,5 +35,16 @@ public class Coordenadas {
       this.c = c;
    }
 
+   @Override
+   public String toString(){
+      return "Coordenadas{" + "x=" + x + ", y=" + y + '}';
+   }
+
+   @Override
+   public int compareTo(Coordenadas o) {
+      return this.y-o.y;
+   }
+
+ 
    
 }

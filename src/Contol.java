@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Random;
-
+import javax.swing.JOptionPane;
 import javax.swing.plaf.ActionMapUIResource;
 
 public class Contol implements KeyListener{
@@ -47,6 +47,20 @@ public class Contol implements KeyListener{
       }
    }
 
+   public boolean gameOver(){
+      boolean condicion=false;
+      this.ordenarCoordenadas();
+      if(this.getLpiezas().size()>pfinalx){
+      for(int i=0;i<this.pfinalx;i++){
+          Coordenadas c=this.getLpiezas().get(i);
+          if(c.getY()==1){
+              condicion=true;
+          }
+      }
+      }
+      return condicion;
+  }
+
    public void bajarPieza(){
       for(Coordenadas c : actual.getBody()){
             int py = c.getY();
@@ -55,6 +69,46 @@ public class Contol implements KeyListener{
       }
    }
 
+   public boolean hayLinea(){
+      int contador=0;
+      boolean condicion=false;
+      for(int i=0;i<pfinaly;i++){
+          for(int j=0;j<this.lpiezas.size();j++){
+              Coordenadas c=lpiezas.get(j);
+              if(i==c.getY()){
+                  contador++;
+                  
+                  if(contador==pfinalx){//se ha encontrado linea
+                      int desde=(j+1)-(pfinalx);
+                      condicion=true;
+                      
+                      for(int x=0;x<pfinalx;x++){
+                          this.lpiezas.remove(desde);
+                      }
+                      this.bajarTodasDesde(i);
+                      contador=0;
+                      j=0;
+                      i=0;
+                      break;
+                  }
+              }else{
+                  contador=0;
+              }
+          }
+      }
+      return condicion;
+  }
+
+  public void bajarTodasDesde(int py){
+   for(Coordenadas c:this.getLpiezas()){
+       if(c.getY()<py){
+       int y=c.getY();
+       y++;
+       c.setY(y);
+       }
+   }
+}
+
    public void rotarPieza(){
       actual.rotarPieza();
    }
@@ -62,7 +116,6 @@ public class Contol implements KeyListener{
    public void moverDerecha(){
       for(Coordenadas c : actual.getBody()){
             int x = c.getX();
-            int y = c.getY();
             x=x+1;
             c.setX(x);
       }
@@ -73,6 +126,7 @@ public class Contol implements KeyListener{
             int x = c.getX();
             int y = c.getY();
             x=x-1;
+            System.out.println(x);
             c.setX(x);
       }
    }
@@ -115,6 +169,7 @@ public class Contol implements KeyListener{
 
    public boolean hayMover(){
       boolean condicion = true;
+
       for(Coordenadas c : actual.getBody()){
           if(accion == Accion.RIGHT){
             if(c.getX()+1 == this.limitetabd){
@@ -126,10 +181,28 @@ public class Contol implements KeyListener{
                condicion = false;
             }
           }       
-      }
+      } 
       return condicion;
    }
 
+    public boolean nohayFicha(){
+      boolean condicion=false;
+      for(Coordenadas ct:this.lpiezas){
+               for(Coordenadas cp:actual.getBody()){
+      if(accion==Accion.RIGHT){
+                        if((cp.getX()+1==ct.getX())&&(cp.getY()==ct.getY())){
+                           condicion=true;
+                        }
+                  }
+                  if((accion==Accion.LEFT)&&(cp.getY()==ct.getY())){
+                        if(cp.getX()-1==ct.getX()){
+                           condicion=true;
+                        }
+                  }
+               }
+      }
+      return condicion;
+   }
    public void keyTyped(KeyEvent e){
    }
 
@@ -144,6 +217,13 @@ public class Contol implements KeyListener{
    }
 
    public void keyReleased(KeyEvent e){
+      char tecla = e.getKeyChar();
+      System.out.println(tecla);
+      switch(tecla){
+         case 'a' : {accion = Accion.NOTHING;} break;
+         case 'd' : {accion = Accion.NOTHING;} break;
+         case ' ' : {accion = Accion.NOTHING;} break;
+      }
    }
 
    public Pieza getActual() {
@@ -207,32 +287,38 @@ public class Contol implements KeyListener{
 
    public void ejecutarFrame() {
 
-      if(this.hayMover()){
-         if(accion == Accion.RIGHT){
-            this.moverDerecha();
+      if(!this.gameOver()){
+        
+         if((!this.hayFinalTablero())&&(!this.hayColisioncontraPieza())){
+         if((this.hayMover())&&(!this.nohayFicha())){
+         
+         if(accion==Accion.LEFT){
+             this.moverIzquierda();
          }
-         if(accion == Accion.LEFT){
-            this.moverIzquierda();
+         if(accion==Accion.RIGHT){
+             this.moverDerecha();
          }
-         if(accion == Accion.SPACE){
-            this.rotarPieza();
+         if(accion==Accion.SPACE){
+             this.rotarPieza();
          }
-         accion=Accion.NOTHING;
-      }else{
-         accion=Accion.NOTHING;
-      }
-
-      if((!this.hayFinalTablero()) && (!this.hayColisioncontraPieza())){
-         this.bajarPieza();
-      }else{
-         this.getLpiezas().addAll(actual.getBody());
-         this.crearPieza();
-         this.ordenarCoordenadas();
-         this.imprimir();
-      }
+             accion = Accion.NOTHING;
+         }
+        this.bajarPieza();
+         }else{         
+             this.getLpiezas().addAll(actual.getBody());
+             this.crearPieza();
+             this.ordenarCoordenadas();
+             //this.imprimir();
+             this.hayLinea();
+         }
+     }else{
+             JOptionPane.showMessageDialog(null, "GAMEOVER!!");
+             System.exit(0);
+         }
+     }
       
    }
 
    
    
-}
+

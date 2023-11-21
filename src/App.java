@@ -80,7 +80,7 @@ public class App extends JFrame implements Runnable{
     public void run(){
          while(true){
             try {
-                Thread.sleep(50);
+                Thread.sleep(150);
             } catch (InterruptedException ex) {
                 Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
             }
